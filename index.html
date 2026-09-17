@@ -1,1 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Social Worker Dashboard</title>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6f9;
+}
+
+/* HEADER */
+
+.header {
+    background: #07558c;
+    color: white;
+    padding: 18px 25px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* TOP CARDS */
+
+.top-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #2fa7dc;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    min-height: 100px;
+}
+
+.card-number {
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.card-title {
+    font-size: 15px;
+    margin-top: 8px;
+}
+
+/* CHARTS */
+
+.chart-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* BOTTOM CARDS */
+
+.bottom-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.small-card {
+    background: white;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.small-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #07558c;
+}
+
+.small-title {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* MOBILE */
+
+@media(max-width: 700px) {
+
+    .top-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-section {
+        grid-template-columns: 1fr;
+    }
+
+    .bottom-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .header {
+        font-size: 20px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="header">
+    Social Worker Community Dashboard
+</div>
+
+
+<div class="dashboard">
+
+
+<!-- TOP KPI CARDS -->
+
+<div class="top-cards">
+
+    <div class="card">
+
+        <div class="card-number" id="workerCount">
+        6
+        </div>
+
+        <div class="card-title">
+        Total Social Workers
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-number" id="activityCount">
+        142
+        </div>
+
+        <div class="card-title">
+        Total Activities
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DONUT CHARTS -->
+
+<div class="chart-section">
+
+
+    <div class="chart-card">
+
+        <div class="chart-title">
+            Social Worker Activities
+        </div>
+
+        <div id="workerChart"></div>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <div class="chart-title">
+            Community Engagement
+        </div>
+
+        <div id="communityChart"></div>
+
+    </div>
+
+</div>
+
+
+<!-- BOTTOM KPI CARDS -->
+
+<div class="bottom-cards">
+
+
+    <div class="small-card">
+
+        <div class="small-number">
+        6
+        </div>
+
+        <div class="small-title">
+        Social Workers
+        </div>
+
+    </div>
+
+
+    <div class="small-card">
+
+        <div class="small-number">
+        142
+        </div>
+
+        <div class="small-title">
+        Total Activities
+        </div>
+
+    </div>
+
+
+    <div class="small-card">
+
+        <div class="small-number">
+        23.7
+        </div>
+
+        <div class="small-title">
+        Average Activities
+        </div>
+
+    </div>
+
+
+    <div class="small-card">
+
+        <div class="small-number">
+        30
+        </div>
+
+        <div class="small-title">
+        Highest Activities
+        </div>
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   YOUR SOCIAL WORKER DATA
+   ===================================================== */
+
+const workers = [
+
+    "Anita Sharma",
+    "Rahul Kumar",
+    "Priya Singh",
+    "Amit Verma",
+    "Neha Gupta",
+    "Ravi Kumar"
+
+];
+
+
+/* NUMBER OF ACTIVITIES */
+
+const activities = [
+
+    25,
+    18,
+    30,
+    22,
+    27,
+    20
+
+];
+
+
+/* QUOTES */
+
+const quotes = [
+
+    "Small actions can create big changes in the community.",
+
+    "Every person deserves access to quality healthcare.",
+
+    "Listening to people is the first step toward solving problems.",
+
+    "Real change begins when we work together.",
+
+    "Empathy is the foundation of meaningful social work.",
+
+    "Community participation creates sustainable change."
+
+];
+
+
+/* COMMUNITY WORK */
+
+const communityWork = [
+
+    15,
+    12,
+    25,
+    18,
+    20,
+    16
+
+];
+
+
+/* =====================================================
+   FIRST DONUT CHART
+   ===================================================== */
+
+Plotly.newPlot(
+
+    "workerChart",
+
+    [{
+
+        labels: workers,
+
+        values: activities,
+
+        type: "pie",
+
+        hole: 0.55,
+
+        textinfo: "percent",
+
+        customdata: quotes,
+
+        hovertemplate:
+
+            "<b>%{label}</b><br>" +
+
+            "Activities: %{value}<br><br>" +
+
+            "<b>Quote:</b><br>" +
+
+            "%{customdata}" +
+
+            "<extra></extra>"
+
+    }],
+
+    {
+
+        height: 430,
+
+        margin: {
+            t: 10,
+            b: 10,
+            l: 10,
+            r: 10
+        },
+
+        showlegend: true,
+
+        legend: {
+            orientation: "h",
+            y: -0.05
+        }
+
+    },
+
+    {
+        responsive: true
+    }
+
+);
+
+
+/* =====================================================
+   SECOND DONUT CHART
+   ===================================================== */
+
+Plotly.newPlot(
+
+    "communityChart",
+
+    [{
+
+        labels: workers,
+
+        values: communityWork,
+
+        type: "pie",
+
+        hole: 0.55,
+
+        textinfo: "percent",
+
+        customdata: quotes,
+
+        hovertemplate:
+
+            "<b>%{label}</b><br>" +
+
+            "Community Work: %{value}<br><br>" +
+
+            "<b>Quote:</b><br>" +
+
+            "%{customdata}" +
+
+            "<extra></extra>"
+
+    }],
+
+    {
+
+        height: 430,
+
+        margin: {
+            t: 10,
+            b: 10,
+            l: 10,
+            r: 10
+        },
+
+        showlegend: true,
+
+        legend: {
+            orientation: "h",
+            y: -0.05
+        }
+
+    },
+
+    {
+        responsive: true
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>
